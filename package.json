@@ -3,6 +3,13 @@
 	"version": "1.0.0",
 	"description": "Project example of integrating flask and preact",
 	"main": "index.js",
+	"scripts": {
+		"info": "webpack-cli info",
+		"test": "webpack-cli configtest",
+		"dev": "webpack-cli build --watch --mode development",
+		"build": "webpack-cli build",
+		"css": "postcss static/css/styles.css -o static/css/styles.min.css"
+	},
 	"dependencies": {
 		"preact": "^10.5.12"
 	},
@@ -16,16 +23,11 @@
 		"eslint": "^7.21.0",
 		"eslint-plugin-react": "^7.22.0",
 		"postcss": "^8.2.7",
+		"postcss-cli": "^8.3.1",
 		"tailwindcss": "^2.0.3",
 		"webpack": "^5.24.3",
 		"webpack-cli": "^4.5.0",
 		"webpack-dev-server": "^3.11.2"
-	},
-	"scripts": {
-		"info": "webpack-cli info",
-		"test": "webpack-cli configtest",
-		"dev": "webpack-cli watch --mode development",
-		"build": "webpack-cli build"
 	},
 	"repository": {
 		"type": "git",

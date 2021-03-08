@@ -1,0 +1,13 @@
+{
+	"sourceMaps": true,
+	"presets": [["@babel/preset-react", { "loose": true }]],
+	"plugins": [
+		[
+			"@babel/plugin-transform-react-jsx",
+			{
+				"pragma": "h",
+				"pragmaFrag": "Fragment"
+			}
+		]
+	]
+}
