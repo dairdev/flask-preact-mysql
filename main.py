@@ -8,6 +8,10 @@ app.testing = False
 def index():
     return render_template('login.html')
 
+@app.route('/home')
+def home():
+    return render_template('home.html', usuario='test')
+
 
 @app.route('/login', methods=['GET','POST'])
 def login():
