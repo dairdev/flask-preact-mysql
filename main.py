@@ -6,7 +6,6 @@ app = Flask(__name__)
 app.debug = False
 app.testing = False
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:My.L0calH0st@localhost/FlaskPreact?host=localhost?port=3306"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{dbusername}:{dbpassword}@{dbhost}:3306/{dbname}'.format(
     dbusername=dbusername,
     dbpassword=dbpassword,
