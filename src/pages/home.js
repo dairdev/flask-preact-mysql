@@ -1,20 +1,18 @@
 import { preact, h, render, Fragment } from "preact";
-import { Sidebar } from '../components/sidebar';
+import { Sidebar } from "../components/sidebar";
 
 const links = [
-	{ url: '/home' ,icon: 'home',  text: 'Home'},
-	{ url: '/documents' ,icon: 'folder',  text: 'Documents'}
+	{ url: "/home", icon: "home", text: "Home" },
+	{ url: "/documents", icon: "folder", text: "Documents" },
 ];
 
-function HomeApp({ user }) {
-	return ( 
+function App({ user }) {
+	return (
 		<Fragment>
-			<div class="text-3xl">
-				Hello {user}
-			</div>
-			<Sidebar links={ links }/>
+			<div class="text-3xl">Hello {user}</div>
+			<Sidebar links={links} />
 		</Fragment>
 	);
 }
 
-render(<HomeApp user={user} />, document.getElementById("app"));
+render(<App user={user} />, document.getElementById("app"));

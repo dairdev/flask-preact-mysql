@@ -19,7 +19,7 @@ function LoginApp() {
 					/>
 				</div>
 				<div class="p-3 flex flex-col">
-					<label  class="flex items-center" htmlFor="password">
+					<label class="flex items-center" htmlFor="password">
 						<span class="material-icons">password</span>
 						&nbsp;Password
 					</label>
@@ -30,6 +30,7 @@ function LoginApp() {
 						class="border border-gray-600"
 					/>
 				</div>
+				{error != "" ? <p className="p-2 text-red-800">{error}</p> : ""}
 				<Button icon="done" text="Entrar" />
 			</form>
 		</div>
