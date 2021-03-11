@@ -52,11 +52,17 @@ def index():
 
 @app.route('/home')
 def home():
+    if session['userId'] is None:
+        return redirect(url_for('login'))
+
     return render_template('home.html', usuario=session['username'])
 
 
 @app.route('/documents')
 def documents():
+    if session['userId'] is None:
+        return redirect(url_for('login'))
+
     return render_template('documents.html', usuario=session['username'])
 
 
@@ -83,6 +89,7 @@ def login():
 def logout():
     session.pop('userId', None)
     session.pop('username', None)
+    return redirect(url_for('login'))
 
 
 @app.route('/upload', methods=['POST'])
