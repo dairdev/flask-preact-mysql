@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+	@apply flex items-center justify-center w-1/2 p-2 text-white bg-blue-700 rounded-md hover:bg-blue-200 hover:text-black;
+}

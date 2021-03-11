@@ -8,7 +8,7 @@ function LoginApp() {
 			<form action="/login" method="post">
 				<div class="p-3 flex flex-col">
 					<label class="flex items-center" htmlFor="user">
-						<span class="material-icons">person</span>
+						<span class="material-icons-sharp">person</span>
 						&nbsp;Usuario
 					</label>
 					<input
@@ -20,7 +20,7 @@ function LoginApp() {
 				</div>
 				<div class="p-3 flex flex-col">
 					<label class="flex items-center" htmlFor="password">
-						<span class="material-icons">password</span>
+						<span class="material-icons-sharp">password</span>
 						&nbsp;Password
 					</label>
 					<input

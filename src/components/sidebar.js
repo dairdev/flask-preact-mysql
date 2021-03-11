@@ -10,7 +10,7 @@ function Sidebar({ links }) {
 							className="flex items-center p-3 text-white hover:bg-blue-800"
 							href={link.url}
 						>
-							<span className="material-icons">{link.icon}</span>
+							<span className="material-icons-sharp">{link.icon}</span>
 							{link.text}
 						</a>
 					</div>

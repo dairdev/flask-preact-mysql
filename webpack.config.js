@@ -5,6 +5,7 @@ module.exports = {
 	entry: {
 		home: "./src/pages/home.js",
 		login: "./src/pages/login.js",
+		documents: "./src/pages/documents.js",
 	},
 	output: {
 		path: __dirname + "/static/js/",
