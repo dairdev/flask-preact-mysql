@@ -1,10 +1,12 @@
-from flask import current_app, flash, Flask, Markup, redirect, render_template, request
+from flask import current_app, flash, Flask, Markup, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
-from config import dbusername, dbpassword, dbhost, dbname 
+from config import dbusername, dbpassword, dbhost, dbname
 
 app = Flask(__name__)
 app.debug = False
 app.testing = False
+
+app.config['SECRET_KEY'] = 'M]39RCGWdXWn@MLH"D3uET;F(4X[Xc'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{dbusername}:{dbpassword}@{dbhost}:3306/{dbname}'.format(
     dbusername=dbusername,
@@ -18,19 +20,31 @@ db = SQLAlchemy(app)
 
 class User(db.Model):
     __tablename__ = 'User'
-    
     id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
     login = db.Column(db.String(30), unique=True, nullable=False)
     pwd = db.Column(db.String(30), unique=True, nullable=False)
+
+
+class Document(db.Model):
+    id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
+    fileName = db.Column(db.String(30), unique=True, nullable=False)
+    uploadedBy = db.Column(db.Integer, nullable=False)
+    uploadedOn = db.Column(db.DateTime, nullable=False)
 
 
 @app.route('/')
 def index():
     return render_template('login.html')
 
+
 @app.route('/home')
 def home():
-    return render_template('home.html', usuario='test')
+    return render_template('home.html', usuario=session['username'])
+
+
+@app.route('/documents')
+def documents():
+    return render_template('documents.html', usuario=session['username'])
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -47,7 +61,8 @@ def login():
                error = 'Usuario/Password errado'
                return render_template('login.html', error=error + '/' + user.login + '|' + user.pwd + ' ' + request.form['password'])
 
-        return render_template('home.html', usuario=request.form['user'])
+        session['username'] = request.form['user']
+        return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
