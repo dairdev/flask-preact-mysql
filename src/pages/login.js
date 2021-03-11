@@ -31,7 +31,7 @@ function LoginApp() {
 					/>
 				</div>
 				{error != "" ? <p className="p-2 text-red-800">{error}</p> : ""}
-				<Button icon="done" text="Entrar" />
+				<Button icon="done" text="Entrar" type="submit" />
 			</form>
 		</div>
 	);

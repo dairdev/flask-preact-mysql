@@ -1,4 +1,4 @@
-from flask import current_app, flash, Flask, Markup, redirect, render_template, request, session, url_for
+from flask import current_app, flash, Flask, Markup, redirect, render_template, request, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from config import dbusername, dbpassword, dbhost, dbname
 
@@ -65,5 +65,14 @@ def login():
         return redirect(url_for('home'))
 
 
+@app.route('/upload', methods=['POST'])
+def upload():
+    isthisFile=request.files.get('file')
+    print(isthisFile)
+    print(isthisFile.filename)
+    isthisFile.save("./UPLOADED/"+isthisFile.filename)
+    return jsonify(fileUploaded=isthisFile.filename)
+    
+    
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

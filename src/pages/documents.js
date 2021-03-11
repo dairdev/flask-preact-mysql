@@ -9,8 +9,23 @@ const links = [
 ];
 
 function App({ user }) {
+	const [files, setFiles] = useState(null);
 
-	const [ files, setFiles ] = useState(null);
+	const onClickUpload = () => {
+		console.log("uploading ...");
+
+		const formData = new FormData();
+
+		formData.append("file", document.querySelector("#uploadFile").files[0]);
+
+		fetch("/upload", {
+			method: "POST",
+			body: formData,
+		})
+			.then((res) => res.json())
+			.then((json) => console.log(json))
+			.catch((eror) => console.log(eror));
+	};
 
 	return (
 		<Fragment>
@@ -20,7 +35,7 @@ function App({ user }) {
 				<div class="w-3/4">
 					<div className="flex items-center">
 						<div class="w-3/4">
-							<div class="p-2 flex items-center justify-between">
+							<form class="p-2 flex items-center justify-between">
 								<span class="w-10/12">
 									<span className="material-icons-sharp">
 										cloud_upload
@@ -32,11 +47,15 @@ function App({ user }) {
 										class="border border-gray-600 w-auto"
 									/>
 								</span>
-								<Button icon="done" text="Upload" />
-							</div>
+								<Button
+									icon="done"
+									text="Upload"
+									type="button"
+									onClickCallback={onClickUpload}
+								/>
+							</form>
 						</div>
-						<div class="flex flex-col p-3">
-						</div>
+						<div class="flex flex-col p-3"></div>
 					</div>
 				</div>
 			</div>
