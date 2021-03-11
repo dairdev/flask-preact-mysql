@@ -1,6 +1,7 @@
 from flask import current_app, flash, Flask, Markup, redirect, render_template, request, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from config import dbusername, dbpassword, dbhost, dbname
+from datetime import date
 
 app = Flask(__name__)
 app.debug = False
@@ -30,6 +31,18 @@ class Document(db.Model):
     fileName = db.Column(db.String(30), unique=True, nullable=False)
     uploadedBy = db.Column(db.Integer, nullable=False)
     uploadedOn = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, fileName, uploadedBy, uploadedOn):
+        self.fileName=fileName
+        self.uploadedBy=uploadedBy
+        self.uploadedOn=uploadedOn
+
+
+def saveDocument(fileName):
+    today = date.today()
+    doc = Document(fileName, session['username'], today)
+    db.session.add(doc)
+    db.session.commit()
 
 
 @app.route('/')
@@ -61,6 +74,7 @@ def login():
                error = 'Usuario/Password errado'
                return render_template('login.html', error=error + '/' + user.login + '|' + user.pwd + ' ' + request.form['password'])
 
+        session['userId'] = user.id
         session['username'] = request.form['user']
         return redirect(url_for('home'))
 
@@ -71,7 +85,13 @@ def upload():
     print(isthisFile)
     print(isthisFile.filename)
     isthisFile.save("./UPLOADED/"+isthisFile.filename)
-    return jsonify(fileUploaded=isthisFile.filename)
+    saveDocument(isthisFile.filename)
+    return jsonify(fileUploaded=isthisFile.filename, files=Document.query.all())
+
+
+@app.route('/files/list', methods=['GET'])
+def listFilse():
+    return jsonify(files=Document.query.all())
     
     
 if __name__ == '__main__':
