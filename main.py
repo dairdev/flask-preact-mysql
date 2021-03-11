@@ -79,6 +79,12 @@ def login():
         return redirect(url_for('home'))
 
 
+@app.route('/logout')
+def logout():
+    session.pop('userId', None)
+    session.pop('username', None)
+
+
 @app.route('/upload', methods=['POST'])
 def upload():
     isthisFile=request.files.get('file')
