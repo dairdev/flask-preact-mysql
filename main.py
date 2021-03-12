@@ -40,7 +40,7 @@ class Document(db.Model):
 
 def saveDocument(fileName):
     today = date.today()
-    doc = Document(fileName, session['username'], today)
+    doc = Document(fileName, session['userId'], today)
     db.session.add(doc)
     db.session.commit()
 
@@ -104,7 +104,10 @@ def upload():
 
 @app.route('/files/list', methods=['GET'])
 def listFilse():
-    return jsonify(files=Document.query.all())
+    cols = ['id', 'fileName']
+    data = Document.query.all()
+    result = [{col: getattr(d, col) for col in cols} for d in data]
+    return jsonify(files=result)
     
     
 if __name__ == '__main__':
