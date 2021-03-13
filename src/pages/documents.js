@@ -1,18 +1,26 @@
 import { preact, h, render, Fragment } from "preact";
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { Sidebar } from "../components/sidebar";
 import { Button } from "../components/button";
-
-const links = [
-	{ url: "/home", icon: "home", text: "Home" },
-	{ url: "/documents", icon: "folder", text: "Documents" },
-];
+import { links } from "../components/links";
 
 function App({ user }) {
-	const [files, setFiles] = useState(null);
+	const [files, setFiles] = useState([]);
+
+	useEffect(() => {
+		//console.log('useEffect');
+		fetch("/documents/list", {
+			method: "GET",
+		})
+			.then((res) => res.json())
+			.then((json) => {
+				console.log(json);
+				setFiles(json.files);
+			})
+			.catch((eror) => console.log(eror));
+	}, []);
 
 	const onClickUpload = () => {
-		console.log("uploading ...");
 
 		const formData = new FormData();
 
@@ -23,8 +31,26 @@ function App({ user }) {
 			body: formData,
 		})
 			.then((res) => res.json())
-			.then((json) => console.log(json))
+			.then((json) => {
+				setFiles(json.files);
+			})
 			.catch((eror) => console.log(eror));
+	};
+
+	const onClickDelete = (target) => {
+		if(target.tagName == 'SPAN')
+			target = target.parentNode;
+
+		fetch("/document/delete", {
+			method: "POST",
+			body: JSON.stringify({ id: target.dataset.id }),
+		})
+			.then((res) => res.json())
+			.then((json) => {
+				setFiles(json.files);
+			})
+			.catch((eror) => console.log(eror));
+
 	};
 
 	return (
@@ -54,8 +80,30 @@ function App({ user }) {
 									onClickCallback={onClickUpload}
 								/>
 							</form>
+
+							<div className="flex flex-col p-3">
+								{files
+									? files.map(function (f) {
+											return (
+												<div className="flex items-center justify-between p-5 bg-blue-100 rounded-sm md-1">
+													<span>{f.fileName}</span>
+													<button
+														type="button"
+														title="Borrar archivo"
+														className="hover:text-red-600"
+														data-id = { f.id }
+														onClick={(e) => onClickDelete(e.target) }
+													>
+														<span className="material-icons-sharp">
+															delete
+														</span>
+													</button>
+												</div>
+											);
+									  })
+									: null}
+							</div>
 						</div>
-						<div class="flex flex-col p-3"></div>
 					</div>
 				</div>
 			</div>
