@@ -1,4 +1,6 @@
 from app import db
+from datetime import date
+from flask_sqlalchemy import SQLAlchemy
 
 class User(db.Model):
     __tablename__ = 'User'
@@ -19,3 +21,20 @@ class Document(db.Model):
         self.uploadedOn=uploadedOn
 
 
+class DocumentManager:
+
+    def saveDocument(fileName, userId):
+        today = date.today()
+        doc = Document(fileName, userId, today)
+        db.session.add(doc)
+        db.session.commit()
+
+    def listDocuments():
+        data = Document.query.all()
+        cols = ['id', 'fileName']
+        result = [{col: getattr(d, col) for col in cols} for d in data]
+        return result
+
+    def deleteDocument(document):
+        db.session.delete(document)
+        db.session.commit()

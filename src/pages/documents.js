@@ -21,7 +21,6 @@ function App({ user }) {
 	}, []);
 
 	const onClickUpload = () => {
-
 		const formData = new FormData();
 
 		formData.append("file", document.querySelector("#uploadFile").files[0]);
@@ -38,19 +37,25 @@ function App({ user }) {
 	};
 
 	const onClickDelete = (target) => {
-		if(target.tagName == 'SPAN')
-			target = target.parentNode;
+		if (target.tagName == "SPAN") target = target.parentNode;
 
 		fetch("/document/delete", {
 			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
 			body: JSON.stringify({ id: target.dataset.id }),
 		})
 			.then((res) => res.json())
 			.then((json) => {
-				setFiles(json.files);
+				if (json.result == true) {
+					let index = files.findIndex(
+						(f) => f.id == target.dataset.id
+					);
+					setFiles((fs) => fs.splice(index, 1));
+				}
 			})
 			.catch((eror) => console.log(eror));
-
 	};
 
 	return (
@@ -91,8 +96,12 @@ function App({ user }) {
 														type="button"
 														title="Borrar archivo"
 														className="hover:text-red-600"
-														data-id = { f.id }
-														onClick={(e) => onClickDelete(e.target) }
+														data-id={f.id}
+														onClick={(e) =>
+															onClickDelete(
+																e.target
+															)
+														}
 													>
 														<span className="material-icons-sharp">
 															delete

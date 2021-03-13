@@ -21,13 +21,6 @@ db = SQLAlchemy(app)
 
 from models import *
 
-def saveDocument(fileName):
-    today = date.today()
-    doc = Document(fileName, session['userId'], today)
-    db.session.add(doc)
-    db.session.commit()
-
-
 @app.route('/')
 def index():
     if 'userId' in session:
@@ -84,23 +77,34 @@ def upload():
     print(isthisFile)
     print(isthisFile.filename)
     isthisFile.save("./UPLOADED/"+isthisFile.filename)
-    saveDocument(isthisFile.filename)
-    return jsonify(fileUploaded=isthisFile.filename, files=Document.query.all())
+    doc = DocumentManager
+    doc.saveDocument(isthisFile.filename, int(session['userId']))
+    result = doc.listDocuments()
+    return jsonify(files=result)
 
 
 @app.route('/document/delete', methods=['POST'])
 def deleteDocument():
-    cols = ['id', 'fileName']
-    data = Document.query.all()
-    result = [{col: getattr(d, col) for col in cols} for d in data]
-    return jsonify(files=result)
+    data = request.get_json(force=True)
+    print('Data', data)
+    if data is None:
+        return jsonify(result=False)
+
+    document = Document.query.filter_by(id=int(data.get('id'))).first()
+    if document is None:
+        return jsonify(result=False)
+
+
+    doc = DocumentManager
+    doc.deleteDocument(document)
+
+    return jsonify(result=True)
 
 
 @app.route('/documents/list', methods=['GET'])
 def listDocuments():
-    data = Document.query.all()
-    cols = ['id', 'fileName']
-    result = [{col: getattr(d, col) for col in cols} for d in data]
+    doc = DocumentManager
+    result = doc.listDocuments()
     return jsonify(files=result)
     
     
